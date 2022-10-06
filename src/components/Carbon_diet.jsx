@@ -38,21 +38,30 @@ class Carbon_diet extends Component {
   }
 
   async climatiqGet() {
-    // fetch from climatic using the key Y4PWG9Q2WA4QP5P3YDAZZVQF0NBX
-    const response = await fetch("https://beta3.api.climatiq.io/search", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer:" + "Y4PWG9Q2WA4QP5P3YDAZZVQF0NBX",
+    const data = {
+      emission_factor: {
+        activity_id: "heat-and-steam-type_purchased",
       },
       parameters: {
         energy: 100,
         energy_unit: "kWh",
       },
+    };
+
+    // fetch from climatic using the key Y4PWG9Q2WA4QP5P3YDAZZVQF0NBX
+    const response = await fetch("https://beta3.api.climatiq.io/estimate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer: " + "Y4PWG9Q2WA4QP5P3YDAZZVQF0NBX",
+      },
+      body: JSON.stringify(data),
     });
+
     let json = await response.json();
-    console.log(json);
-    this.state.out = JSON.stringify(json.results[0].activity_id);
+    console.log(json.co2e);
+    // this.state.out = JSON.stringify(json.results[0].activity_id);
+    this.state.out = JSON.stringify(json);
     this.setState({ out: this.state.out });
   }
 
